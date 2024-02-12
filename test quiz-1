@@ -1,0 +1,116 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Question {
+private:
+    string question;
+    string correctAnswer;
+    int score;
+
+public:
+    Question(string q, string ans, int s) : question(q), correctAnswer(ans), score(s) {}
+
+    bool askQuestion() const {
+        string userAnswer;
+        cout << question << endl;
+        cout << "Enter your choice: ";
+        cin >> userAnswer;
+        transform(userAnswer.begin(), userAnswer.end(), userAnswer.begin(), ::tolower); // Convert user answer to lowercase
+        if (userAnswer == correctAnswer) {
+            cout << "Correct answer!" << endl;
+            return true;
+        } else {
+            cout << "Wrong answer!" << endl;
+            return false;
+        }
+    }
+
+    int getScore() const {
+        return score;
+    }
+};
+
+
+class Quiz {
+private:
+    vector<Question> questions;
+    int totalScore;
+
+public:
+    Quiz() : totalScore(0) {
+        // Add questions to the quiz
+        questions.push_back(Question("What is the capital of India?", "delhi", 4));
+        questions.push_back(Question("What is the national bird of India?", "peacock", 4));
+        questions.push_back(Question("What is the national sport of India?", "hockey", 4));
+        questions.push_back(Question("What is the currency of India?", "inr", 4));
+        questions.push_back(Question("What is the tallest building in the world?", "burj khalifa", 4));
+        questions.push_back(Question("Who is the CM of MP?", "mohan yadav", 4));
+        questions.push_back(Question("What is the largest continent?", "asia", 4));
+        questions.push_back(Question("Who is the fastest human?", "usain bolt", 4));
+        questions.push_back(Question("Premier League is played in which country?", "uk", 4));
+        questions.push_back(Question("What is the capital of MP?", "bhopal", 4));
+    }
+
+    void startQuiz() {
+        for (const auto& q : questions) {
+            if (q.askQuestion()) {
+                totalScore += q.getScore();
+            } else {
+                totalScore -= 1;
+            }
+        }
+    }
+
+    void displayResult() const {
+        cout << "Your score is: " << totalScore << endl;
+        if (totalScore <= 0) {
+            cout << "Poor performance!" << endl;
+        } else if (totalScore > 0 && totalScore <= 10) {
+            cout << "Try to improve next time." << endl;
+        } else if (totalScore > 10 && totalScore <= 25) {
+            cout << "That was decent." << endl;
+        } else if (totalScore > 25 && totalScore <= 35) {
+            cout << "Good performance." << endl;
+        } else if (totalScore > 35 && totalScore <= 39) {
+            cout << "Close but no cigar." << endl;
+        } else {
+            cout << "Great job! You win." << endl;
+        }
+    }
+};
+
+int main() {
+    cout << "---------Welcome to the quiz---------" << endl;
+    cout << "Enter 0 for instructions" << endl;
+    cout << "Enter 1 to start the game" << endl;
+
+    int choice;
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    switch (choice) {
+        case 0: {
+            // Display instructions
+            cout << "There are 10 questions in this quiz" << endl;
+            cout << "Each correct answer will reward 4 points" << endl;
+            cout << "Each wrong answer will deduct 1 point" << endl;
+            cout << "In order to win you will need to score 40/40" << endl;
+            break;
+        }
+        case 1: {
+            // Start the quiz
+            Quiz quiz;
+            quiz.startQuiz();
+            quiz.displayResult();
+            break;
+        }
+        default:
+            cout << "Invalid choice" << endl;
+            break;
+    }
+
+    return 0;
+}
